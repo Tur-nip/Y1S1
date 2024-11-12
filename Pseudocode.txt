@@ -1,0 +1,76 @@
+BEGIN MAINLOGIC
+	DEFINE LIST mylist
+	CALL begin_action()
+		type = begin_action()
+	IF (type = 1) THEN
+		IF (login_user() 
+	ELSEIF (type = 2) THEN
+		login_admin()
+	ELSEIF (type = 3) THEN
+		PROCESS register_admin()
+		IF (register_admin() = 1) THEN
+			PROCESS create_admin() 
+	ENDIF
+
+END MAINLOGIC
+
+DEFINE begin_action()
+PRINT("Please select action to perform: (login_user),(login_admin),(register_admin)")
+READ(actiontype)
+#customer acc
+IF (actiontype = login_user) THEN
+	RETURN 1
+#admin acc for creating
+ELSEIF (actiontype = login_admin) THEN
+	RETURN 2
+#super user
+ELSEIF (actiontype = register_admin) THEN
+	RETURN 3
+#error check
+ELSE
+	PRINT("INVALID ACTION")
+	RETURN 0
+ENDIF
+ENDDEFINE
+
+#########SUPER USER#######################
+DEFINE register_admin()
+PRINT("Please enter Super User ID:")
+READ(id)
+PRINT("Please enter Super User Password:")
+READ(password)
+IF (id = SUPERUSER001) AND (password = SUPERUSERACC) THEN
+	RETURN(1)
+ELSE 
+	RETURN(0)
+ENDIF
+
+ENDDEFINE register_admin
+
+DEFINE create_admin()
+APPEND list_admin[]
+
+ENDDEFINE
+
+##########ADMIN STAFF###########################
+DEFINE login_admin()
+DECLARE adminDT AS String
+PRINT("Please enter your Admin ID and Password:")
+READ(adminDT)
+OPEN list_admin[] AS READ
+cnt = 0
+DOWHILE (cnt < LEN list_admin)
+	READ list_admin[cnt]
+	IF (list_admin[cnt] = adminDT) THEN
+		RETURN(1)
+	ELSE
+		cnt = cnt + 1
+	ENDIF
+ENDDO
+ENDDEFINE
+
+
+
+
+#################EXTRAS########################
+PRINT len(value of a list) to print out the name/
